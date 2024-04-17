@@ -10,7 +10,7 @@ using std::string;
 
 class GameObject
 {
-public:
+public://cmment here
 	virtual void load(string& fileName);
 	virtual void draw(sf::RenderWindow& window);
 
