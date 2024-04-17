@@ -4,7 +4,7 @@
 int main(void)
 {
 	sf::RenderWindow gameWindow;
-	gameWindow.create(sf::VideoMode(1000, 1000), "Chutes and Ladders");
+	gameWindow.create(sf::VideoMode(750, 750), "Chutes and Ladders");
 
 	while (gameWindow.isOpen())
 	{
