@@ -10,7 +10,13 @@ using std::string;
 
 class GameObject
 {
-public://cmment here
+public:
+	// constructor
+	GameObject(float x, float y, const string& fileName);
+
+	// destructor
+	~GameObject();
+
 	virtual void load(string& fileName);
 	virtual void draw(sf::RenderWindow& window);
 
