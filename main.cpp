@@ -13,7 +13,7 @@ int main(void)
 		{
 			if (event.type == sf::Event::Closed)
 			{
-
+				gameWindow.close();
 			}
 		}
 	}
