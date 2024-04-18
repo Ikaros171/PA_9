@@ -35,5 +35,4 @@ private:
 	float _y; // for position
 	sf::Texture _texture;
 	string _fileName;
-	bool _isLoaded;
 };

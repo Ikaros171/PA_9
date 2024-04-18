@@ -38,6 +38,21 @@
     <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-graphics-2.dll">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-graphics-d-2.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-system-2.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-system-d-2.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-window-2.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-window-d-2.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
     <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-graphics-d-2.dll" />
     <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-system-2.dll" />
     <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-system-d-2.dll" />

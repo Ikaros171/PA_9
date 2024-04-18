@@ -6,7 +6,6 @@ GameObject::GameObject(float x, float y, const string& fileName)
 	this->_x = x;
 	this->_y = y;
 	this->_fileName = fileName;
-	this->_isLoaded = false;
 }
 
 // destructor
@@ -17,12 +16,8 @@ GameObject::~GameObject()
 
 void GameObject::load(string& fileName)
 {
-	if (this->_isLoaded != true)
-	{
-		this->_texture.loadFromFile(fileName); // load texture
-		this->_sprite.setTexture(this->_texture); // set texture
-		this->_isLoaded = true;
-	}
+	this->_texture.loadFromFile(fileName); // load texture
+	this->_sprite.setTexture(this->_texture); // set texture
 }
 
 void GameObject::draw(sf::RenderWindow& window)
