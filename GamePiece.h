@@ -3,14 +3,19 @@
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 
-class GamePiece : public sf::CircleShape
+#include "GameObject.h"
+
+class GamePiece : public GameObject
 {
 public:
-	GamePiece(float radius, const sf::Vector2f& position, const sf::Color& colour) : sf::CircleShape(radius)
+	// constructor
+	GamePiece(float x, float y, const string& fileName, int xCord, int yCord) : GameObject(x, y, fileName)
 	{
-		this->setFillColor(colour);
-		this->setPosition(position);
+		this->_xCord = xCord;
+		this->_yCord = yCord;
 	}
 private:
+	int _xCord;
+	int _yCord;
 };
 

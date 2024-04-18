@@ -2,11 +2,19 @@
 
 #include "GameObject.h"
 
-class Board : public GameObject, public sf::RectangleShape
+#include <vector>
+
+using std::vector;
+
+class Board : public GameObject
 {
 public:
-	
-private:
+	// constructor
+	Board(float x, float y, const string& fileName) : GameObject(x, y, fileName)
+	{
 
+	}
+private:
+	v
 };
 
