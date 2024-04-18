@@ -30,28 +30,19 @@
     <ClCompile Include="GamePiece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SFML-2.6.1\bin\sfml-graphics-d-2.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="SFML-2.6.1\bin\sfml-system-2.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="SFML-2.6.1\bin\sfml-system-d-2.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="SFML-2.6.1\bin\sfml-window-2.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="SFML-2.6.1\bin\sfml-window-d-2.dll">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClCompile Include="GamePlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-graphics-2.dll">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-graphics-d-2.dll" />
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-system-2.dll" />
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-system-d-2.dll" />
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-window-2.dll" />
+    <CopyFileToFolders Include="SFML-2.6.1\bin\sfml-window-d-2.dll" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -64,6 +55,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GamePiece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
