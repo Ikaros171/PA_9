@@ -11,6 +11,15 @@ public:
 	int y_destination;
 };
 
+class Player
+{
+public:
+
+	std::string player;
+	int x_cordinate;
+	int y_cordinate;
+};
+
 class Board : public GameObject
 {
 public:
@@ -24,17 +33,8 @@ public:
 		}
 	}
 
-	void player_moves(int x, int y, player& p);
+	void player_moves(int x, int y, Player& p);
 
 private:
 	std::vector <std::vector<cell>> board;
-};
-
-class player
-{
-public:
-
-	std::string player;
-	int x_cordinate;
-	int y_cordinate;
 };

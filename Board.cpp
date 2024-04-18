@@ -1,6 +1,6 @@
 #include "Board.h"
 
-void Board::player_moves(int x, int y, player& p)
+void Board::player_moves(int x, int y, Player& p)
 {
 	board.at(x).at(y);
 
