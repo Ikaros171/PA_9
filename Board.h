@@ -47,7 +47,7 @@ public:
 
 		if (inputStream.is_open()) // check successful file opening
 		{
-			while ((inputStream >> j) && (index < 101)) // reads in the x cord, also serves as end of file marker
+			while ((inputStream >> j) && (index < 106)) // reads in the x cord, also serves as end of file marker
 			{
 				temp.setXCord(j); // set x coordinate
 				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
@@ -87,5 +87,5 @@ public:
 	Cell getCell(int pos);
 
 private:
-	Cell _cellArray[101];
+	Cell _cellArray[106];
 };
