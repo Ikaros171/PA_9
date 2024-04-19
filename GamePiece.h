@@ -13,7 +13,15 @@ public:
 	{
 		this->_playerName = playerName;
 	}
+
+	//getter 
+	int getPos() const;
+
+	//setter
+	void setPos(int new_position);
+
 private:
 	string _playerName;
+	int _position;
 };
 

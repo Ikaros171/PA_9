@@ -16,6 +16,7 @@ GameObject& GameObject::operator= (GameObject& rhs)
 	this->_texture = rhs._texture;
 	this->_x = rhs._x;
 	this->_y = rhs._y;
+	return *this;
 }
 
 // copy constructor
