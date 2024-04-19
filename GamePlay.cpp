@@ -88,7 +88,7 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 
 		//check if transport
 		Cell temp = this->_gameBoard.getCell(_players[playerNumber].getPos());
-		if (temp.getTransportStatus() == true)
+		if (temp.getDestIndex() != 0)
 		{
 			//is a transport spot update player position
 			//temp int for new position

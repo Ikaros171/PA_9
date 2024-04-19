@@ -1,9 +1,8 @@
 #include "Cell.h"
 
 // constructor
-Cell::Cell(bool transport, float x, float y, int destIndex)
+Cell::Cell(float x, float y, int destIndex)
 {
-	this->_transport = transport;
 	this->_xCord = x;
 	this->_yCord = y;
 	this->_destIndex = destIndex;
@@ -16,11 +15,6 @@ Cell::~Cell()
 }
 
 // getters
-bool Cell::getTransportStatus() const
-{
-	return this->_transport;
-}
-
 float Cell::getXCord() const
 {
 	return this->_xCord;
@@ -37,11 +31,6 @@ int Cell::getDestIndex() const
 }
 
 // setters
-void Cell::setTransportStatus(bool status)
-{
-	this->_transport = status;
-}
-
 void Cell::setXCord(float newX)
 {
 	this->_xCord = newX;
