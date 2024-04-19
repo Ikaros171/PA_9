@@ -4,10 +4,10 @@
 GamePlay::GamePlay() 
 {
 	//create board using default constructor
-	this->_gameBoard = Board();
+	this->_gameBoard = Board(0, 0, "Images/Board.png");
 	//create players using constructors with which image to use
-	this->_player1 = GamePiece(ARGUMENTS);
-	this->_player2 = GamePiece(ARGUMENTS);
+	this->_player1 = GamePiece(0, 800, "Images/Player1.png", 0, -1);
+	this->_player2 = GamePiece(0, 800, "Images/Player2.png", 0, -1);
 }
 
 //Function: playerTurn
