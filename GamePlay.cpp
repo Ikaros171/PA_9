@@ -9,10 +9,39 @@ GamePlay::GamePlay()
 	Board temp(0, 0, "Images/Board.png");
 	this->_gameBoard = temp;
 	//create players using constructors with which image to use
-	GamePiece player(0.0, 800.0, "Images/Player1.png", "Player 1");
-	GamePiece player2(0.0, 800.0, "Images/Player2.png", "Player 2");
+	GamePiece player(0.0, 800.0, "Images/Player1.png", "Player 1", 0);
+	GamePiece player2(0.0, 800.0, "Images/Player2.png", "Player 2", 0);
 	this->_players[0] = player;
 	this->_players[1] = player2;
+}
+
+// wrapper for all the gameplay functions and drawing so main is nice and pristine
+void GamePlay::playGame()
+{
+	srand((unsigned int)time(nullptr)); // set seed for all dice rolls
+	int index = 0;
+	std::vector<GameObject> drawVector; // used so we can just call the draw function for each element of the vector - we'll
+										// add/remove elements as needed.
+	
+
+	while (this->_gameWindow.isOpen())
+	{
+		sf::Event event;
+		while (this->_gameWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				this->_gameWindow.close();
+			}
+		}
+
+
+
+
+		this->_gameWindow.clear();
+
+		this->_gameWindow.display();
+	}
 }
 
 //Function: playerTurn
@@ -105,17 +134,6 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 	return won;
 }
 
-void GamePlay::player_moves(int x, int y, GamePiece& p)
-{
-	/*board.at(x).at(y);
-
-	if (board.at(x).at(y).getTransportStatus())
-	{
-		p.setPositionX(board.at(x).at(y).x_destination);
-		p.setPositionY(board.at(x).at(y).y_destination);
-	}*/
-}
-
 //Function: roll
 //
 //Description: generates a random number between 1-6
@@ -126,10 +144,6 @@ void GamePlay::player_moves(int x, int y, GamePiece& p)
 //Returns: int for dice roll
 int GamePlay::roll()
 {
-	//generate number
-	srand(time(0));
-	int num = (rand() % 6) + 1;
-
-	//return result
-	return num;
+	//generate and return a number 1 - 6
+	return ((rand() % 6) + 1);
 }

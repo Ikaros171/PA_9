@@ -134,10 +134,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePiece.cpp" />
     <ClCompile Include="GamePlay.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="TestFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,10 +165,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePiece.h" />
     <ClInclude Include="GamePlay.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="TestFunctions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Cells.csv" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

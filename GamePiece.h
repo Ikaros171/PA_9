@@ -9,9 +9,10 @@ class GamePiece : public GameObject
 {
 public:
 	// constructor
-	GamePiece(float x = 0.0, float y = 0.0, const string& fileName = "", const string& playerName = "") : GameObject(x, y, fileName)
+	GamePiece(float x = 0.0, float y = 0.0, const string& fileName = "", const string& playerName = "", int pos) : GameObject(x, y, fileName)
 	{
 		this->_playerName = playerName;
+		this->_position = pos;
 	}
 
 	//getter 

@@ -1,42 +1,17 @@
 #pragma once
 
 #include "GameObject.h"
+#include "Cell.h"
+
 #include <fstream>
 
 using std::ifstream;
 
-class Cell
-{
-public:
-	// constructor
-	Cell(bool transport = false, float x = 0.0, float y = 0.0, int destIndex = 0);
-
-	// destructor
-	~Cell();
-
-	// getters
-	bool getTransportStatus() const;
-	float getXCord() const;
-	float getYCord() const;
-	int getDestIndex() const;
-
-	// setters
-	void setTransportStatus(bool status);
-	void setXCord(float newX);
-	void setYCord(float newY);
-	void setDestIndex(int newIndex);
-
-private:
-	bool _transport;
-	float _xCord;
-	float _yCord;
-	int _destIndex;
-};
-
 class Board : public GameObject
 {
 public:
-	// constructor
+	// constructor - we used an array of class Cells to break the board down into individual squares for player movement purposes.
+	// We load the pixel coordinates of these cells from 'Cells.csv'. 
 	Board(float x = 0.0, float y = 0.0, const string& fileName = "") : GameObject(x, y, fileName)
 	{
 		ifstream inputStream;
@@ -50,10 +25,10 @@ public:
 			while ((inputStream >> j) && (index < 106)) // reads in the x cord, also serves as end of file marker
 			{
 				temp.setXCord(j); // set x coordinate
-				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), ','); // ignore the comma
 				inputStream >> j; // read in y coordinate
 				temp.setYCord(j); // set y coordinate
-				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), ','); // ignore the comma
 				inputStream >> transportStatus; // read in whether the cell contains a ladder or a chute
 				if (transportStatus == 'F')
 				{
@@ -63,12 +38,12 @@ public:
 				{
 					temp.setTransportStatus(true);
 				}
-				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), ','); // ignore the comma
 				inputStream >> j; // read in the cell number that the chute/ladder transports to; -1 indicates the cell
 				// doesn't have a chute nor a ladder
 				temp.setDestIndex(j);
 				inputStream >> transportStatus; // read in the newline at the end of the line
-				this->_cellArray[index] = temp;
+				this->_cellArray[index] = temp; // insert the cell into the array
 			}
 			inputStream.close();
 		}
@@ -84,7 +59,7 @@ public:
 	~Board();
 
 	// getter
-	Cell getCell(int pos);
+	Cell& getCell(int pos);
 
 private:
 	Cell _cellArray[106];
