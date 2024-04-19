@@ -46,12 +46,61 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 		//draw
 			//draw dice roll
 
+			//Update player position
+			//get cell for destination of roll
+			Cell new_cell = this->_gameBoard.getCell(_players[playerNumber].getPos() + die_roll);
+
+			//set X/Y coords
+			_players[playerNumber].setPositionX(new_cell.getXCord());
+			_players[playerNumber].setPositionY(new_cell.getYCord());
+
 			//draw new player position
 
+
 		//check if transport
-		if (this->_gameBoard.getCell())
+		Cell temp = this->_gameBoard.getCell(_players[playerNumber].getPos());
+		if (temp.getTransportStatus() == true)
+		{
+			//is a transport spot update player position
+			//temp int for new position
+			int dest = temp.getDestIndex();
+
+			//cell for destination
+			Cell dest_cell = this->_gameBoard.getCell(dest);
+
+			//update position
+			_players[playerNumber].setPos(dest);
+
+			//update X/Y coordinates
+			_players[playerNumber].setPositionX(dest_cell.getXCord());
+			_players[playerNumber].setPositionY(dest_cell.getYCord());
+
+			//draw at new position
+		}
+
+		//check if bonus roll
+		if (die_roll > (bonus - 1))
+		{
+			//player gets another roll
+
+			//before running next turn check if end is reached
+			if (_players[playerNumber].getPos() > 99)
+			{
+				won = true;
+				return won;
+			}
+			else
+			{
+				//run bonus turn
+				playerTurn(playerNumber, bonus);
+			}
+		}
 
 		//check if end is reached
+		if (_players[playerNumber].getPos() > 99)
+		{
+			won = true;
+		}
 	}
 	return won;
 }
