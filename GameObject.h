@@ -12,7 +12,13 @@ class GameObject
 {
 public:
 	// constructor
-	GameObject(float x, float y, const string& fileName);
+	GameObject(float x = 0, float y = 0, const string& fileName = "");
+
+	// overloaded assignment operator
+	GameObject& operator= (GameObject& rhs);
+
+	// copy constructor
+	GameObject(GameObject& copy);
 
 	// destructor
 	~GameObject();
@@ -30,9 +36,9 @@ public:
 
 protected:
 	sf::Sprite _sprite;
-private:
 	float _x; // for position
 	float _y; // for position
 	sf::Texture _texture;
 	string _fileName;
+private:
 };
