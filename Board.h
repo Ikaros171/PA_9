@@ -1,35 +1,76 @@
 #pragma once
 
 #include "GameObject.h"
+#include <fstream>
 
-class cell : public GameObject, public sf::RectangleShape
+using std::ifstream;
+
+class Cell
 {
 public:
-	bool ladder;
-	bool snake;
-	int x_destination;
-	int y_destination;
-};
+	// constructor
+	Cell(bool transport = false, float x = 0.0, float y = 0.0, int destIndex = 0);
 
-class Player
-{
-public:
+	// destructor
+	~Cell();
 
-	std::string player;
-	int x_cordinate;
-	int y_cordinate;
+	// getters
+	bool getTransportStatus() const;
+	float getXCord() const;
+	float getYCord() const;
+	int getDestIndex() const;
+
+	// setters
+	void setTransportStatus(bool status);
+	void setXCord(float newX);
+	void setYCord(float newY);
+	void setDestIndex(int newIndex);
+
+private:
+	bool _transport;
+	float _xCord;
+	float _yCord;
+	int _destIndex;
 };
 
 class Board : public GameObject
 {
 public:
 	// constructor
-	Board(float x, float y, const string& fileName) : GameObject(x, y, fileName)
+	Board(float x = 0.0, float y = 0.0, const string& fileName = "") : GameObject(x, y, fileName)
 	{
-		board = std::vector <std::vector<cell>>(10);
-		for (int i = 0; i < 10; i++)
+		ifstream inputStream;
+		inputStream.open("Cells.csv", std::ios::in);
+		int index = 0, j = 0;
+		char transportStatus = '\0';
+		Cell temp(false, 0, 0, 0);
+
+		if (inputStream.is_open()) // check successful file opening
 		{
-			board.at(i) = std::vector<cell>(10);
+			while ((inputStream >> j) && (index < 101)) // reads in the x cord, also serves as end of file marker
+			{
+				temp.setXCord(j); // set x coordinate
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
+				inputStream >> j; // read in y coordinate
+				temp.setYCord(j); // set y coordinate
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
+				inputStream >> transportStatus; // read in whether the cell contains a ladder or a chute
+				if (transportStatus == 'F')
+				{
+					temp.setTransportStatus(false);
+				}
+				else
+				{
+					temp.setTransportStatus(true);
+				}
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the comma
+				inputStream >> j; // read in the cell number that the chute/ladder transports to; -1 indicates the cell
+				// doesn't have a chute nor a ladder
+				temp.setDestIndex(j);
+				inputStream >> transportStatus; // read in the newline at the end of the line
+				this->_cellArray[index] = temp;
+			}
+			inputStream.close();
 		}
 	}
 
@@ -42,8 +83,12 @@ public:
 	// deconstructor
 	~Board();
 
-	void player_moves(int x, int y, Player& p);
+	// getter
+	std::vector<Cell>& getBoardMember()
+	{
+		//return this->board;
+	}
 
 private:
-	std::vector <std::vector<cell>> board;
+	Cell _cellArray[101];
 };

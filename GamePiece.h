@@ -9,13 +9,11 @@ class GamePiece : public GameObject
 {
 public:
 	// constructor
-	GamePiece(float x, float y, const string& fileName, int xCord, int yCord) : GameObject(x, y, fileName)
+	GamePiece(float x = 0.0, float y = 0.0, const string& fileName = "", const string& playerName = "") : GameObject(x, y, fileName)
 	{
-		this->_xCord = xCord;
-		this->_yCord = yCord;
+		this->_playerName = playerName;
 	}
 private:
-	int _xCord;
-	int _yCord;
+	string _playerName;
 };
 

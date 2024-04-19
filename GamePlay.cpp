@@ -3,11 +3,15 @@
 //constructor
 GamePlay::GamePlay() 
 {
+	this->_gameWindow.create(sf::VideoMode(800, 900), "Chutes and Ladders"); // create game window
 	//create board using default constructor
-	this->_gameBoard = Board(0, 0, "Images/Board.png");
+	Board temp(0, 0, "Images/Board.png");
+	this->_gameBoard = temp;
 	//create players using constructors with which image to use
-	this->_player1 = GamePiece(0, 800, "Images/Player1.png", 0, -1);
-	this->_player2 = GamePiece(0, 800, "Images/Player2.png", 0, -1);
+	GamePiece player(0.0, 800.0, "Images/Player1.png", "Player 1");
+	GamePiece player2(0.0, 800.0, "Images/Player2.png", "Player 2");
+	this->_player1 = player;
+	this->_player2 = player2;
 }
 
 //Function: playerTurn
@@ -43,6 +47,17 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 		//check if end is reached
 	}
 	return won;
+}
+
+void GamePlay::player_moves(int x, int y, GamePiece& p)
+{
+	/*board.at(x).at(y);
+
+	if (board.at(x).at(y).getTransportStatus())
+	{
+		p.setPositionX(board.at(x).at(y).x_destination);
+		p.setPositionY(board.at(x).at(y).y_destination);
+	}*/
 }
 
 //Function: roll

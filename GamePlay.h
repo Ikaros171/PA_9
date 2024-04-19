@@ -16,8 +16,11 @@ public:
 	bool playerTurn(int playerNumber, int bonus = 6);
 	int roll();
 
+	void player_moves(int x, int y, GamePiece& p);
+
 private:
 	Board _gameBoard;
 	GamePiece _player1;
 	GamePiece _player2;
+	sf::RenderWindow _gameWindow;
 };
