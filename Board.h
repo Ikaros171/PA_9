@@ -15,35 +15,16 @@ public:
 	Board(float x = 0.0, float y = 0.0, const string& fileName = "") : GameObject(x, y, fileName)
 	{
 		ifstream inputStream;
-		inputStream.open("Cells.csv", std::ios::in);
-		int index = 0, j = 0;
-		char transportStatus = '\0';
-		Cell temp(false, 0, 0, 0);
+		inputStream.open("Cells.csv");
+		int i = 0, new_x = 0, new_y = 0, new_trans = 0;
 
 		if (inputStream.is_open()) // check successful file opening
 		{
-			while ((inputStream >> j) && (index < 106)) // reads in the x cord, also serves as end of file marker
+			while (inputStream >> new_x >> new_y >> new_trans && (i < 106)) // reads in the coords, and transport destination
 			{
-				temp.setXCord(j); // set x coordinate
-				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), ','); // ignore the comma
-				inputStream >> j; // read in y coordinate
-				temp.setYCord(j); // set y coordinate
-				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), ','); // ignore the comma
-				inputStream >> transportStatus; // read in whether the cell contains a ladder or a chute
-				if (transportStatus == 'F')
-				{
-					temp.setTransportStatus(false);
-				}
-				else
-				{
-					temp.setTransportStatus(true);
-				}
-				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), ','); // ignore the comma
-				inputStream >> j; // read in the cell number that the chute/ladder transports to; -1 indicates the cell
-				// doesn't have a chute nor a ladder
-				temp.setDestIndex(j);
-				inputStream >> transportStatus; // read in the newline at the end of the line
-				this->_cellArray[index] = temp; // insert the cell into the array
+				Cell temp(new_x, new_y, new_trans);
+				this->_cellArray[i] = temp;
+				i++;
 			}
 			inputStream.close();
 		}
