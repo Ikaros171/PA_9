@@ -8,6 +8,22 @@ GameObject::GameObject(float x, float y, const string& fileName)
 	this->_fileName = fileName;
 }
 
+// overloaded assignment operator
+GameObject& GameObject::operator= (GameObject& rhs)
+{
+	this->_fileName = rhs._fileName;
+	this->_sprite = rhs._sprite;
+	this->_texture = rhs._texture;
+	this->_x = rhs._x;
+	this->_y = rhs._y;
+}
+
+// copy constructor
+GameObject::GameObject(GameObject& copy)
+{
+	*this = copy;
+}
+
 // destructor
 GameObject::~GameObject()
 {

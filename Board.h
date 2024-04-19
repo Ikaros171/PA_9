@@ -33,6 +33,15 @@ public:
 		}
 	}
 
+	// overloaded assignment operator
+	Board& operator= (Board& rhs);
+
+	// copy constructor
+	Board(Board& copy);
+
+	// deconstructor
+	~Board();
+
 	void player_moves(int x, int y, Player& p);
 
 private:
