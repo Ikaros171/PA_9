@@ -20,7 +20,6 @@ public:
 
 private:
 	Board _gameBoard;
-	GamePiece _player1;
-	GamePiece _player2;
+	GamePiece _players[2];
 	sf::RenderWindow _gameWindow;
 };

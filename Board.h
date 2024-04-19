@@ -84,10 +84,7 @@ public:
 	~Board();
 
 	// getter
-	std::vector<Cell>& getBoardMember()
-	{
-		//return this->board;
-	}
+	Cell getCell(int pos);
 
 private:
 	Cell _cellArray[101];

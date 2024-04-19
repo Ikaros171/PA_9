@@ -1,4 +1,5 @@
 #include "GamePlay.h"
+#include <time.h>
 
 //constructor
 GamePlay::GamePlay() 
@@ -10,8 +11,8 @@ GamePlay::GamePlay()
 	//create players using constructors with which image to use
 	GamePiece player(0.0, 800.0, "Images/Player1.png", "Player 1");
 	GamePiece player2(0.0, 800.0, "Images/Player2.png", "Player 2");
-	this->_player1 = player;
-	this->_player2 = player2;
+	this->_players[0] = player;
+	this->_players[1] = player2;
 }
 
 //Function: playerTurn
@@ -34,15 +35,21 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 	//bools to track if the turn is finished, and if the player is at the end
 	//of the game board yet
 	bool fin = false, won = false;
+	int die_roll = 0;
 
 	//main loop to play through the turn until a number < bonus is rolled
 	while (fin == false) 
 	{
 		//roll
+		die_roll = roll();
 
 		//draw
+			//draw dice roll
+
+			//draw new player position
 
 		//check if transport
+		if (this->_gameBoard.getCell())
 
 		//check if end is reached
 	}
@@ -62,8 +69,7 @@ void GamePlay::player_moves(int x, int y, GamePiece& p)
 
 //Function: roll
 //
-//Description: generates a random number between 1-6, and draws the 
-//Cont: corresponding dice image to the screen
+//Description: generates a random number between 1-6
 //
 //Argument(s):
 //	int bonus: determines whether the bonus roll icon should be drawn
@@ -72,8 +78,9 @@ void GamePlay::player_moves(int x, int y, GamePiece& p)
 int GamePlay::roll()
 {
 	//generate number
-
-	//draw
+	srand(time(0));
+	int num = (rand() % 6) + 1;
 
 	//return result
+	return num;
 }

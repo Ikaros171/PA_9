@@ -80,3 +80,16 @@ Board::~Board()
 	// handled by the Call Stack
 }
 
+//Function: getCell
+//
+//Description: returns the cell object stored at the index entered
+//
+//Argument(s)
+//	int pos : int to index the cell array
+//
+//Returns: cell object
+
+Cell Board::getCell(int pos)
+{
+	return this->_cellArray[pos];
+}
