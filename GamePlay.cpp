@@ -19,10 +19,17 @@ GamePlay::GamePlay()
 void GamePlay::playGame()
 {
 	srand((unsigned int)time(nullptr)); // set seed for all dice rolls
-	int index = 0;
-	std::vector<GameObject> drawVector; // used so we can just call the draw function for each element of the vector - we'll
+	this->_gameWindow.setFramerateLimit(60);
+	int index = 0, selection = -1, whoWon = -1;
+	bool atTitle = true, atRules = false, atGame = false, atPlayer1Win = false, atPlayer2Win = false;
+	std::vector<GameObject*> drawVector; // used so we can just call the draw function for each element of the vector - we'll
 										// add/remove elements as needed.
-	
+	Menu TitleScreen(0.0, 0.0, "Images/Title.png");
+	drawVector.push_back(&TitleScreen); // default to showing the title screen when booting game
+	Menu HowToPlay(0.0, 0.0, "Images/HowToPlay.png");
+	Menu Player1Wins(0.0, 0.0, "Images/Player1Wins.png");
+	Menu Player2Wins(0.0, 0.0, "Images/Player2Wins.png");
+	setUpMenus(TitleScreen, HowToPlay, Player1Wins, Player2Wins); // setup the menus, textures, and sizes/positions of buttons
 
 	while (this->_gameWindow.isOpen())
 	{
@@ -34,12 +41,63 @@ void GamePlay::playGame()
 				this->_gameWindow.close();
 			}
 		}
+		if (atGame)
+		{
+			if (whoWon != -1) // someone won
+			{
+				// logic for checking which player won in order to load the correct win screen
+				drawVector.clear();
+				atGame = false;
+			}
+		}
+		else if (atTitle)
+		{
+			if (TitleScreen.getBtn0().wasClicked(event)) // clicked play game
+			{
+				selection = 1;
+				whoWon = -1; // reinitialize in the event that user plays multiple times
+				atTitle = false; // no longer at title
+				atGame = true;
+				drawVector.clear(); // get rid of the titlemenu for the draw loop
+				drawVector.push_back(&(this->_gameBoard));
+				drawVector.push_back(&(this->_players[0]));
+				drawVector.push_back(&(this->_players[1]));
+				// push in the dice eventually
+			}
+			if (TitleScreen.getBtn1().wasClicked(event)) // clicked how to play
+			{
+				drawVector.clear();
+				selection = 2;
+				drawVector.push_back(&HowToPlay);
+				atTitle = false; // no longer at title
+				atRules = true;
+			}
+			if (TitleScreen.getBtn2().wasClicked(event)) // clicked exit game
+			{
+				selection = 3;
+			}
+		}
+		else if (atRules || atPlayer1Win || atPlayer2Win)
+		{
+			if (HowToPlay.getBtn0().wasClicked(event) || Player1Wins.getBtn0().wasClicked(event) 
+				|| Player2Wins.getBtn0().wasClicked(event)) // go back to title
+			{
+				atRules = false;
+				atPlayer1Win = false;
+				atPlayer2Win = false;
+				atTitle = true;
+				drawVector.clear();
+				drawVector.push_back(&TitleScreen);
+			}
+		}
 
 
-
-
+		// drawing loop
 		this->_gameWindow.clear();
-
+		for (index = 0; index < drawVector.size(); ++index)
+		{
+			(*(drawVector[index])).draw(this->_gameWindow);
+		}
 		this->_gameWindow.display();
 	}
 }
@@ -146,4 +204,45 @@ int GamePlay::roll()
 {
 	//generate and return a number 1 - 6
 	return ((rand() % 6) + 1);
+}
+
+
+
+///////////////////////////////////////////////////////// Non-Member Functions //////////////////////////////////////////////
+// 
+// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member
+// function so it didn't take up too much space in playGame
+void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins)
+{
+	titleScreen.load(titleScreen.getFileName()); // load the texture and attach it to the sprite
+	titleScreen.getBtn0().setPosition(160, 160);
+	titleScreen.getBtn0().setSize(sf::Vector2f(480, 80));
+	titleScreen.getBtn1().setPosition(160, 320);
+	titleScreen.getBtn1().setSize(sf::Vector2f(480, 80));
+	titleScreen.getBtn2().setPosition(160, 480);
+	titleScreen.getBtn2().setSize(sf::Vector2f(480, 80));
+
+	howToPlay.load(howToPlay.getFileName()); // load the texture and attach it to the sprite
+	howToPlay.getBtn0().setPosition(0, 0);
+	howToPlay.getBtn0().setSize(sf::Vector2f(800, 900)); // want button to cover the whose screen
+	howToPlay.getBtn1().setPosition(800, 900);
+	howToPlay.getBtn1().setSize(sf::Vector2f(0, 0)); // sent with Bilbo
+	howToPlay.getBtn2().setPosition(800, 900);
+	howToPlay.getBtn2().setSize(sf::Vector2f(0, 0));
+
+	Player1Wins.load(Player1Wins.getFileName()); // load the texture and attach it to the sprite
+	Player1Wins.getBtn0().setPosition(0, 0);
+	Player1Wins.getBtn0().setSize(sf::Vector2f(800, 900)); // want button to cover the whose screen
+	Player1Wins.getBtn1().setPosition(800, 900);
+	Player1Wins.getBtn1().setSize(sf::Vector2f(0, 0)); // sent with Bilbo
+	Player1Wins.getBtn2().setPosition(800, 900);
+	Player1Wins.getBtn2().setSize(sf::Vector2f(0, 0));
+
+	Player2Wins.load(Player2Wins.getFileName()); // load the texture and attach it to the sprite
+	Player2Wins.getBtn0().setPosition(0, 0);
+	Player2Wins.getBtn0().setSize(sf::Vector2f(800, 900)); // want button to cover the whose screen
+	Player2Wins.getBtn1().setPosition(800, 900);
+	Player2Wins.getBtn1().setSize(sf::Vector2f(0, 0)); // sent with Bilbo
+	Player2Wins.getBtn2().setPosition(800, 900);
+	Player2Wins.getBtn2().setSize(sf::Vector2f(0, 0));
 }

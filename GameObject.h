@@ -15,10 +15,10 @@ public:
 	GameObject(float x = 0, float y = 0, const string& fileName = "");
 
 	// overloaded assignment operator
-	GameObject& operator= (GameObject& rhs);
+	GameObject& operator= (const GameObject& rhs);
 
 	// copy constructor
-	GameObject(GameObject& copy);
+	GameObject(const GameObject& copy);
 
 	// destructor
 	~GameObject();
@@ -29,6 +29,7 @@ public:
 	// getters
 	virtual float getPositionX() const;
 	virtual float getPositionY() const;
+	virtual string& getFileName();
 
 	// setters
 	virtual void setPositionX(float newX);
