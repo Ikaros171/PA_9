@@ -25,3 +25,7 @@ private:
 	GamePiece _players[2];
 	sf::RenderWindow _gameWindow;
 };
+
+// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member
+// function so it didn't take up too much space in playGame
+void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins);

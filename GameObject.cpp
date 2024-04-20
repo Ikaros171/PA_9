@@ -9,7 +9,7 @@ GameObject::GameObject(float x, float y, const string& fileName)
 }
 
 // overloaded assignment operator
-GameObject& GameObject::operator= (GameObject& rhs)
+GameObject& GameObject::operator= (const GameObject& rhs)
 {
 	this->_fileName = rhs._fileName;
 	this->_sprite = rhs._sprite;
@@ -20,7 +20,7 @@ GameObject& GameObject::operator= (GameObject& rhs)
 }
 
 // copy constructor
-GameObject::GameObject(GameObject& copy)
+GameObject::GameObject(const GameObject& copy)
 {
 	*this = copy;
 }
@@ -51,6 +51,11 @@ float GameObject::getPositionX() const
 float GameObject::getPositionY() const
 {
 	return this->_y;
+}
+
+string& GameObject::getFileName()
+{
+	return this->_fileName;
 }
 
 // setters

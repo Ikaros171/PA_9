@@ -16,7 +16,8 @@ public:
 	{
 		ifstream inputStream;
 		inputStream.open("Cells.csv");
-		int i = 0, new_x = 0, new_y = 0, new_trans = 0;
+		int i = 0, new_trans = 0;
+		float new_x = 0, new_y = 0;
 
 		if (inputStream.is_open()) // check successful file opening
 		{
