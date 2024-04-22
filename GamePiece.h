@@ -15,6 +15,15 @@ public:
 		this->_position = pos;
 	}
 
+	// overloaded assignment operator
+	GamePiece& operator= (GamePiece& rhs);
+
+	// copy constructor
+	GamePiece(GamePiece& copy);
+
+	// destructor
+	~GamePiece();
+
 	//getter 
 	int getPos() const;
 

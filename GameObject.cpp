@@ -11,11 +11,14 @@ GameObject::GameObject(float x, float y, const string& fileName)
 // overloaded assignment operator
 GameObject& GameObject::operator= (const GameObject& rhs)
 {
-	this->_fileName = rhs._fileName;
-	this->_sprite = rhs._sprite;
-	this->_texture = rhs._texture;
-	this->_x = rhs._x;
-	this->_y = rhs._y;
+	if (this != &rhs)
+	{
+		this->_fileName = rhs._fileName;
+		this->_sprite = rhs._sprite;
+		this->_texture = rhs._texture;
+		this->_x = rhs._x;
+		this->_y = rhs._y;
+	}
 	return *this;
 }
 
@@ -35,6 +38,7 @@ void GameObject::load(string& fileName)
 {
 	this->_texture.loadFromFile(fileName); // load texture
 	this->_sprite.setTexture(this->_texture); // set texture
+	this->_sprite.setPosition(this->_x, this->_y); // set the texture's position
 }
 
 void GameObject::draw(sf::RenderWindow& window)

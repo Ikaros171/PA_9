@@ -24,6 +24,7 @@ private:
 	Board _gameBoard;
 	GamePiece _players[2];
 	sf::RenderWindow _gameWindow;
+	GameObject _bottomBanner;
 };
 
 // deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member

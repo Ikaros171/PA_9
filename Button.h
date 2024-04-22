@@ -11,7 +11,7 @@ public:
 		: sf::RectangleShape(size)
 	{
 		this->setPosition(pos);
-		this->setFillColor(sf::Color::Black); // change to transparent later
+		this->setFillColor(sf::Color::Transparent); // change to transparent later
 	}
 
 	// deconstructor

@@ -3,14 +3,17 @@
 // overloaded assignment operator
 Board& Board::operator= (Board& rhs)
 {
-	this->_sprite = rhs._sprite;
-	this->_fileName = rhs._fileName;
-	this->_texture = rhs._texture;
-	this->_x = rhs._x;
-	this->_y = rhs._y;
-	for (int i = 0; i < 106; i++)
+	if (this != &rhs) // check for self-assignment
 	{
-		this->_cellArray[i] = rhs._cellArray[i];
+		this->_sprite = rhs._sprite;
+		this->_fileName = rhs._fileName;
+		this->_texture = rhs._texture;
+		this->_x = rhs._x;
+		this->_y = rhs._y;
+		for (int i = 0; i < 106; i++)
+		{
+			this->_cellArray[i] = rhs._cellArray[i];
+		}
 	}
 	return *this;
 }
