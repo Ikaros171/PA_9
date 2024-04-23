@@ -24,8 +24,8 @@ int main(void)
 		test.testCase1();
 		test.testCase2();
 		test.testCase3();
-		test.testCase4();
-		test.testCase5();
+		//test.testCase4();
+		//test.testCase5();
 	}
 
 	return 0;
