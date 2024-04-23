@@ -78,8 +78,8 @@ void TestFunctions::testCase2()
 		//pick a random one to make sure the values were read right
 		if (i == 21)
 		{
-			//cell should be 0,56,42
-			if (temp.getXCord() == 0 && temp.getYCord() == 56 && temp.getDestIndex() == 42)
+			//cell should be 0,560,42
+			if (temp.getXCord() == 0 && temp.getYCord() == 560 && temp.getDestIndex() == 42)
 			{
 				expected = true;
 			}
