@@ -5,22 +5,40 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-//constructor
-TestFunctions::TestFunctions()
+// menu for selection between debug and play game mode
+bool TestFunctions::debugOrGame() const
 {
-	GamePlay* new_game = new GamePlay();
-	_play = new_game;
-}
+	bool runDebug = false;
+	int selection = 0, flag = -1;
 
-TestFunctions::TestFunctions(const TestFunctions& copy) 
-{
-	_play = copy._play;
-}
+	do
+	{
+		system("cls");
+		cout << "Your available options are as follows:" << "\n\n";
+		cout << "1. Play Game" << endl << "2. Run Test Functions" << "\n\n";
+		cout << "Please input a 1 or a 2 for corresponding choice: ";
+		if (!(cin >> selection) || selection < 1 || selection > 2)
+		{
+			flag = -1;
+			cin.clear();
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cout << "\n\n" << "Invalid input. Please enter a 1 or a 2." << endl;
+			system("pause");
+		}
+		else
+		{
+			flag = 1;
+		}
+	} while (flag != 1);
 
-//destructor
-TestFunctions::~TestFunctions()
-{
-	delete _play;
+	cout << "\n\n"; // to make it look nicer if we choose to run test functions
+
+	if (selection == 2) // run debug test functions
+	{
+		runDebug = true;
+	}
+
+	return runDebug;
 }
 
 //test functions
@@ -39,7 +57,7 @@ void TestFunctions::testCase1() {
 	//this code is copy pasted from GamePlay.cpp as there is no way to
 	//automatically iterate through player turns with the way the PlayGame()
 	//function is written
-	GamePiece test_piece;
+	GamePiece test_piece(0.0, 0.0, "Images/Player1.png", "Player 1", 0);
 	test_piece.setPos(104);
 
 	//check if the player position is beyond 100
@@ -72,7 +90,7 @@ void TestFunctions::testCase2()
 {
 	bool expected = false;
 
-	Board new_board;
+	Board new_board(0.0, 0.0, "Images/Board.png");
 	Cell temp;
 	for (int i = 0; i < 101; i++)
 	{
@@ -118,13 +136,13 @@ void TestFunctions::testCase3()
 	bool expected = false;
 
 	//default board
-	Board test_board;
+	Board test_board(0.0, 0.0, "Images/Board.png");
 
 	//temp cell
 	Cell temp;
 
 	//temp game piece set to cell 1 which is a transport cell
-	GamePiece test_piece;
+	GamePiece test_piece(0.0, 0.0, "Images/Player1.png", "Player 1", 0);
 	test_piece.setPos(1);
 
 	//update piece to new coords using code from GamePlay.cpp
@@ -155,16 +173,69 @@ void TestFunctions::testCase3()
 	}
 }
 
-//Function: testCase4
+// Function: testCase4
 // 
-//Description: 
+// Description: Creates a GameObject, Menu, and Dice to test whether the correct version of the draw() function is called
+// based on the type of object memory in the element of the std::vector<GameObject*>. Since this test case involved testing
+// the graphics, we weren't sure how to objectively test whether it was successful, so we ask the magnanimous user for help.
+// The expected drawing should be the title screen, a green player 1 banner at the bottom of the window, and a dice displaying
+// 6 pips on top of the banner. If this is what was drawn, click anywhere within the window for the test to clear successfully.
+// If this is not what was drawn, click the X to close the window and the test will fail. 
 //
-//Argument(s): N/A
+// Argument(s): N/A
 // 
-//Returns: void
+// Returns: void
 void TestFunctions::testCase4()
 {
 	bool expected = false;
+	sf::RenderWindow window;
+	window.create(sf::VideoMode(800, 900), "Test Window");
+	GameObject object1(0.0, 800.0, "Images/Player1BottomBanner.png");
+	object1.load(object1.getFileName());
+	Dice object2(100.0, 800.0, "Images/dice_6.png");
+	object2.load(object2.getFileName());
+	Menu object3(0.0, 0.0, "Images/Title.png");
+	object3.load(object3.getFileName());
+	object3.getBtn0().setPosition(sf::Vector2f(0.0, 0.0));
+	object3.getBtn0().setSize(sf::Vector2f(800.0, 900.0));
+	object3.getBtn1().setPosition(sf::Vector2f(0.0, 0.0));
+	object3.getBtn1().setSize(sf::Vector2f(0, 0));
+	object3.getBtn2().setPosition(sf::Vector2f(0.0, 0.0));
+	object3.getBtn2().setSize(sf::Vector2f(0, 0));
+
+	std::vector<GameObject*> drawVector;
+	drawVector.push_back(&object3);
+	drawVector.push_back(&object1);
+	drawVector.push_back(&object2);
+
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
+			else if (event.type == sf::Event::MouseButtonReleased)
+			{
+				auto mousePosition = sf::Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
+				if (object3.getBtn0().getGlobalBounds().contains(mousePosition))
+				{
+					expected = true;
+					window.close();
+				}
+			}
+		}
+
+		window.clear();
+		for (int index = 0; index < drawVector.size(); ++index)
+		{
+			(*(drawVector[index])).draw(window);
+		}
+		window.display();
+	}
+
 	if (expected == true)
 	{
 		//logic behaves as expected, print success to console
@@ -187,6 +258,20 @@ void TestFunctions::testCase4()
 void TestFunctions::testCase5()
 {
 	bool expected = false;
+
+	int dieRoll = 5;
+	string temp1 = "Images/dice_", temp2 = std::to_string(dieRoll), temp3 = ".png";
+	string fileName = temp1 + temp2 + temp3;
+
+	Dice die(0.0, 0.0, "Images/dice_2.png");
+	die.load(die.getFileName()); // initially load in 2 pips texture
+	die.load(fileName); // should load in the 5 pip texture
+
+	if (die.getFileName() == "Images/dice_5.png") // check for success
+	{
+		expected = true;
+	}
+	
 	if (expected == true)
 	{
 		//logic behaves as expected, print success to console

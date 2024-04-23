@@ -7,8 +7,8 @@
 int main(void)
 {
 	//debug mode changes whether it runs test functions or main game are run
-	bool debug = false;
-
+	TestFunctions test;
+	bool debug = test.debugOrGame();
 
 	if (debug == false)
 	{
@@ -20,12 +20,11 @@ int main(void)
 	else
 	{
 		//run all 5 test cases
-		TestFunctions test;
 		test.testCase1();
 		test.testCase2();
 		test.testCase3();
-		//test.testCase4();
-		//test.testCase5();
+		test.testCase4();
+		test.testCase5();
 	}
 
 	return 0;

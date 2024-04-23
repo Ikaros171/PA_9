@@ -7,7 +7,7 @@ class Menu : public GameObject
 {
 public:
 	// constructor
-	Menu(float x = 0.0, float y = 0.0, const string& fileName = "") : GameObject(x, y, fileName)
+	Menu(float x = 0.0, float y = 0.0, const string& fileName = "Images/Default.png") : GameObject(x, y, fileName)
 	{
 		Button temp(sf::Vector2f(0, 0), sf::Vector2f(0, 0));
 		this->_btn0 = temp;

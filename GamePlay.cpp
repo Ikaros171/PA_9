@@ -39,7 +39,7 @@ void GamePlay::playGame()
 	Menu HowToPlay(0.0, 0.0, "Images/HowToPlay.png");
 	Menu Player1Wins(0.0, 0.0, "Images/Player1Wins.png");
 	Menu Player2Wins(0.0, 0.0, "Images/Player2Wins.png");
-	setUpMenus(TitleScreen, HowToPlay, Player1Wins, Player2Wins); // setup the menus, textures, and sizes/positions of buttons
+	this->setUpMenus(TitleScreen, HowToPlay, Player1Wins, Player2Wins); // setup the menus, textures, and sizes/positions of buttons
 	drawVector.push_back(&TitleScreen); // default to showing the title screen when booting game
 
 	while (this->_gameWindow.isOpen() && !quit) 
@@ -50,6 +50,7 @@ void GamePlay::playGame()
 			if (event.type == sf::Event::Closed)
 			{
 				this->_gameWindow.close();
+				return;
 			}
 			else if (event.type == sf::Event::MouseButtonReleased)
 			{
@@ -80,10 +81,10 @@ void GamePlay::playGame()
 		}
 		if (atGame)
 		{
-			while (!won)
+			while (!won && !quit)
 			{
 				// game logic here
-				won = playerTurn(1, 6, drawVector, event); // player 1's turn
+				won = playerTurn(1, 6, drawVector, event, quit); // player 1's turn
 				if (won) // player 1 wins
 				{
 					drawVector.clear();
@@ -91,9 +92,9 @@ void GamePlay::playGame()
 					atGame = false;
 					selection = 0;
 				}
-				if (!won) // don't continue to next turn if player 1 wins
+				else if (!quit) // don't continue to next turn if player 1 wins or if the window was closed within playerTurn
 				{
-					won = playerTurn(2, 6, drawVector, event); // player 2's turn
+					won = playerTurn(2, 6, drawVector, event, quit); // player 2's turn
 					if (won) // player 2 wins
 					{
 						drawVector.clear();
@@ -116,31 +117,37 @@ void GamePlay::playGame()
 			drawVector.push_back(&(this->_players[0]));
 			drawVector.push_back(&(this->_players[1]));
 			drawVector.push_back(&(this->_die));
+			selection = 0;
 			break;
 		case 2:
 			drawVector.clear();
 			drawVector.push_back(&HowToPlay);
 			atTitle = false; // no longer at title
+			selection = 0;
 			break;
 		case 3:
 			quit = true;
+			selection = 0;
 			break;
 		case 4:
 			selection = 0; // reset so we don't immediately choose the same option without user input
 			atTitle = true;
 			drawVector.clear();
 			drawVector.push_back(&TitleScreen);
+			selection = 0;
 			break;
 		}
 
-
-		// drawing loop
-		this->_gameWindow.clear();
-		for (index = 0; index < drawVector.size(); ++index)
+		if (!quit)
 		{
-			(*(drawVector[index])).draw(this->_gameWindow);
+			// drawing loop
+			this->_gameWindow.clear();
+			for (index = 0; index < drawVector.size(); ++index)
+			{
+				(*(drawVector[index])).draw(this->_gameWindow);
+			}
+			this->_gameWindow.display();
 		}
-		this->_gameWindow.display();
 	}
 }
 
@@ -159,7 +166,7 @@ void GamePlay::playGame()
 //
 //Returns: bool, true if end is reached, false if not
 
-bool GamePlay::playerTurn(int playerNumber, int bonus, std::vector<GameObject*>& drawVector, sf::Event event)
+bool GamePlay::playerTurn(int playerNumber, int bonus, std::vector<GameObject*>& drawVector, sf::Event event, bool& quit)
 {
 	//bools to track if the turn is finished, and if the player is at the end
 	//of the game board yet
@@ -197,6 +204,8 @@ bool GamePlay::playerTurn(int playerNumber, int bonus, std::vector<GameObject*>&
 				if (event.type == sf::Event::Closed)
 				{
 					this->_gameWindow.close();
+					quit = true; // so exiting the window from within this function causes the entire playGame function to exit
+					return won;
 				}
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
@@ -245,7 +254,7 @@ bool GamePlay::playerTurn(int playerNumber, int bonus, std::vector<GameObject*>&
 		Sleep(1000); // wait one second before checking transport status
 
 		//check if transport
-		// Cell temp = this->_gameBoard.getCell(_players[playerNumber - 1].getPos()); // redundant, can just use new_cell
+
 		if (new_cell.getDestIndex() != 0)
 		{
 			//is a transport spot update player position
@@ -275,23 +284,6 @@ bool GamePlay::playerTurn(int playerNumber, int bonus, std::vector<GameObject*>&
 			Sleep(1000); // wait one second before checking bonus roll status
 		}
 
-		//check if bonus roll
-		//if (die_roll >= bonus)
-		//{
-		//	//player gets another roll
-
-		//	//before running next turn check if end is reached
-		//	if (_players[playerNumber].getPos() > 99)
-		//	{
-		//		won = true;
-		//		return won;
-		//	}
-		//	else
-		//	{
-		//		//run bonus turn
-		//		playerTurn(playerNumber, bonus, drawVector); // no need for recursion, because we have variable fin as condition for the while loop
-		//	}
-		//}
 		if (die_roll < bonus)
 		{
 			fin = true; // done with turn
@@ -321,13 +313,9 @@ int GamePlay::roll()
 	return ((rand() % 6) + 1);
 }
 
-
-
-///////////////////////////////////////////////////////// Non-Member Functions //////////////////////////////////////////////
-
-// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member
+// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a
 // function so it didn't take up too much space in playGame
-void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins)
+void GamePlay::setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins)
 {
 	titleScreen.load(titleScreen.getFileName()); // load the texture and attach it to the sprite
 	titleScreen.getBtn0().setPosition(160, 180);
