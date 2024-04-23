@@ -39,6 +39,13 @@ void TestFunctions::testCase1() {
 	//this code is copy pasted from GamePlay.cpp as there is no way to
 	//automatically iterate through player turns with the way the PlayGame()
 	//function is written
+	GamePiece test_piece;
+	test_piece.setPos(104);
+
+	//check if the player position is beyond 100
+	if (test_piece.getPos() > 99) {
+		expected = true;
+	}
 
 	if (expected == true)
 	{
@@ -100,7 +107,8 @@ void TestFunctions::testCase2()
 
 //Function: testCase3
 // 
-//Description: 
+//Description: Checks if a player positioned on a transport cell is properly
+//Cont: moved to the new coordinates
 //
 //Argument(s): N/A
 // 
@@ -108,6 +116,33 @@ void TestFunctions::testCase2()
 void TestFunctions::testCase3()
 {
 	bool expected = false;
+
+	//default board
+	Board test_board;
+
+	//temp cell
+	Cell temp;
+
+	//temp game piece set to cell 1 which is a transport cell
+	GamePiece test_piece;
+	test_piece.setPos(1);
+
+	//update piece to new coords using code from GamePlay.cpp
+	temp = test_board.getCell(test_piece.getPos());
+	if (temp.getDestIndex() != 0)
+	{
+		test_piece.setPos(temp.getDestIndex());
+		temp = test_board.getCell(test_piece.getPos());
+		test_piece.setPositionX(temp.getXCord());
+		test_piece.setPositionY(temp.getYCord());
+	}
+
+	//check that both X and Y were set properly
+	if (test_piece.getPositionX() == 160 && test_piece.getPositionY() == 480)
+	{
+		expected = true;
+	}
+
 	if (expected == true)
 	{
 		//logic behaves as expected, print success to console
