@@ -5,20 +5,8 @@
 class TestFunctions
 {
 public:
-	//constructors
-	TestFunctions();
-	TestFunctions(const TestFunctions& copy);
-
-	//destructor
-	~TestFunctions();
-
-	//overloaded = operator
-	TestFunctions& operator=(const TestFunctions& lhs) 
-	{
-		TestFunctions* copy = new TestFunctions(lhs);
-		_play = copy->_play;
-		return *this;
-	}
+	// menu for selection between debug and play game mode
+	bool debugOrGame() const;
 
 	//test functions
 	void testCase1();
@@ -28,6 +16,6 @@ public:
 	void testCase5();
 
 private:
-	GamePlay* _play;
+	
 };
 

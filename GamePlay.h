@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <Windows.h> // for the Sleep function; called within player turn so that user can see the changes in gamePiece position
-					// step by step instead of the program drawing it too fast
+					 // step by step instead of the program drawing it too fast
 
 class GamePlay 
 {
@@ -19,8 +19,12 @@ public:
 	void playGame();
 
 	//functions
-	bool playerTurn(int playerNumber, int bonus, std::vector<GameObject*>& drawVector, sf::Event event);
+	bool playerTurn(int playerNumber, int bonus, std::vector<GameObject*>& drawVector, sf::Event event, bool& quit);
 	int roll();
+
+	// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a
+	// function so it didn't take up too much space in playGame
+	void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins);
 
 private:
 	Board _gameBoard;
@@ -30,6 +34,6 @@ private:
 	Dice _die;
 };
 
-// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member
-// function so it didn't take up too much space in playGame
-void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins);
+//// deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member
+//// function so it didn't take up too much space in playGame
+//void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins);

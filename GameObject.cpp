@@ -1,11 +1,11 @@
 #include "GameObject.h"
 
-// constructor
+// constructor - calls the load function
 GameObject::GameObject(float x, float y, const string& fileName)
 {
 	this->_x = x;
 	this->_y = y;
-	this->_fileName = fileName;
+	this->load(fileName); // updates _fileName, _texture, and _sprite
 }
 
 // overloaded assignment operator
@@ -36,6 +36,7 @@ GameObject::~GameObject()
 
 void GameObject::load(const string& fileName)
 {
+	this->_fileName = fileName; // update the attribute fileName
 	this->_texture.loadFromFile(fileName); // load texture
 	this->_sprite.setTexture(this->_texture); // set texture
 	this->_sprite.setPosition(this->_x, this->_y); // set the texture's position

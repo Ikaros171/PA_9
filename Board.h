@@ -12,7 +12,7 @@ class Board : public GameObject
 public:
 	// constructor - we used an array of class Cells to break the board down into individual squares for player movement purposes.
 	// We load the pixel coordinates of these cells from 'Cells.csv'. 
-	Board(float x = 0.0, float y = 0.0, const string& fileName = "") : GameObject(x, y, fileName)
+	Board(float x = 0.0, float y = 0.0, const string& fileName = "Images/Default.png") : GameObject(x, y, fileName)
 	{
 		ifstream inputStream;
 		inputStream.open("Cells.csv");

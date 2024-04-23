@@ -7,7 +7,7 @@ class Dice : public GameObject
 {
 public:
 	// constructor
-	Dice(float x = 100.0, float y = 800.0, const string& fileName = "") : GameObject(x, y, fileName)
+	Dice(float x = 100.0, float y = 800.0, const string& fileName = "Images/Default.png") : GameObject(x, y, fileName)
 	{
 		Button temp(sf::Vector2f(100, 100), sf::Vector2f(x, y));
 		this->_rollDice = temp;

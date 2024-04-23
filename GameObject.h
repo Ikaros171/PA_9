@@ -11,8 +11,8 @@ using std::string;
 class GameObject
 {
 public:
-	// constructor
-	GameObject(float x = 0, float y = 0, const string& fileName = "");
+	// constructor - calls the load function
+	GameObject(float x = 0, float y = 0, const string& fileName = "Images/Default.png");
 
 	// overloaded assignment operator
 	GameObject& operator= (const GameObject& rhs);
