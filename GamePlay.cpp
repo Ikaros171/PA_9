@@ -17,9 +17,13 @@ GamePlay::GamePlay()
 	this->_players[1] = player2;
 	this->_players[1].load(this->_players[1].getFileName()); // load and set the player's texture to the sprite
 	// this bottom banner is to hide the 800 x 100 black square beneath the game board and to display the dice when rolled
-	GameObject temp2(0.0, 800.0, "Images/BottomBanner.png");
+	GameObject temp2(0.0, 800.0, "Images/Player1BottomBanner.png");
 	this->_bottomBanner = temp2;
 	this->_bottomBanner.load(this->_bottomBanner.getFileName());
+	// instantiate the die
+	Dice temp3(100, 800, "Images/dice_1.png");
+	this->_die = temp3;
+	this->_die.load(this->_die.getFileName());
 }
 
 // wrapper for all the gameplay functions and drawing so main is nice and pristine
@@ -27,8 +31,8 @@ void GamePlay::playGame()
 {
 	srand((unsigned int)time(nullptr)); // set seed for all dice rolls
 	this->_gameWindow.setFramerateLimit(60);
-	int index = 0, whoWon = -1, selection = -1;
-	bool atTitle = true, atGame = false, atPlayer1Win = false, atPlayer2Win = false, quit = false;
+	int index = 0, selection = -1;
+	bool atTitle = true, atGame = false, quit = false, won = false;
 	std::vector<GameObject*> drawVector; // used so we can just call the draw function for each element of the vector - we'll
 										// add/remove elements as needed.
 	Menu TitleScreen(0.0, 0.0, "Images/Title.png");
@@ -38,7 +42,7 @@ void GamePlay::playGame()
 	setUpMenus(TitleScreen, HowToPlay, Player1Wins, Player2Wins); // setup the menus, textures, and sizes/positions of buttons
 	drawVector.push_back(&TitleScreen); // default to showing the title screen when booting game
 
-	while (this->_gameWindow.isOpen() && !quit)
+	while (this->_gameWindow.isOpen() && !quit) 
 	{
 		sf::Event event;
 		while (this->_gameWindow.pollEvent(event))
@@ -65,7 +69,7 @@ void GamePlay::playGame()
 						selection = 3;
 					}
 				}
-				else if (!atGame)
+				else if (!atGame) // at rules or player 1/2 win screen
 				{
 					if (HowToPlay.getBtn0().getGlobalBounds().contains(mousePosition)) // go back to main menu
 					{
@@ -76,19 +80,34 @@ void GamePlay::playGame()
 		}
 		if (atGame)
 		{
-			if (whoWon != -1) // someone won
+			while (!won)
 			{
-				// logic for checking which player won in order to load the correct win screen
-				drawVector.clear();
-				atGame = false;
+				// game logic here
+				won = playerTurn(1, 6, drawVector, event); // player 1's turn
+				if (won) // player 1 wins
+				{
+					drawVector.clear();
+					drawVector.push_back(&Player1Wins);
+					atGame = false;
+					selection = 0;
+				}
+				if (!won) // don't continue to next turn if player 1 wins
+				{
+					won = playerTurn(2, 6, drawVector, event); // player 2's turn
+					if (won) // player 2 wins
+					{
+						drawVector.clear();
+						drawVector.push_back(&Player2Wins);
+						atGame = false;
+						selection = 0;
+					}
+				}
 			}
-			// game logic here
-
 		}
 		switch (selection)
 		{
 		case 1:
-			whoWon = -1; // reinitialize in the event that user plays multiple times
+			won = false; // reinitialize in the event that user plays multiple times
 			atTitle = false; // no longer at title
 			atGame = true;
 			drawVector.clear(); // get rid of the titlemenu for the draw loop
@@ -96,7 +115,7 @@ void GamePlay::playGame()
 			drawVector.push_back(&(this->_bottomBanner));
 			drawVector.push_back(&(this->_players[0]));
 			drawVector.push_back(&(this->_players[1]));
-			// push in the dice eventually
+			drawVector.push_back(&(this->_die));
 			break;
 		case 2:
 			drawVector.clear();
@@ -108,8 +127,6 @@ void GamePlay::playGame()
 			break;
 		case 4:
 			selection = 0; // reset so we don't immediately choose the same option without user input
-			atPlayer1Win = false;
-			atPlayer2Win = false;
 			atTitle = true;
 			drawVector.clear();
 			drawVector.push_back(&TitleScreen);
@@ -142,7 +159,7 @@ void GamePlay::playGame()
 //
 //Returns: bool, true if end is reached, false if not
 
-bool GamePlay::playerTurn(int playerNumber, int bonus) 
+bool GamePlay::playerTurn(int playerNumber, int bonus, std::vector<GameObject*>& drawVector, sf::Event event)
 {
 	//bools to track if the turn is finished, and if the player is at the end
 	//of the game board yet
@@ -152,66 +169,139 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 	//main loop to play through the turn until a number < bonus is rolled
 	while (fin == false) 
 	{
+		// set the texture for the player banner depending on whose turn it is
+		if (playerNumber == 1)
+		{
+			this->_bottomBanner.load("Images/Player1BottomBanner.png");
+		}
+		else
+		{
+			this->_bottomBanner.load("Images/Player2BottomBanner.png");
+		}
+		
+		// somehow prompt and wait for user input before rolling dice while still drawing?
+		bool rolled = false;
+
+		do
+		{
+			// draw the board and all to start
+			this->_gameWindow.clear();
+			for (int index = 0; index < drawVector.size(); ++index)
+			{
+				(*(drawVector[index])).draw(this->_gameWindow);
+			}
+			this->_gameWindow.display();
+
+			while (this->_gameWindow.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+				{
+					this->_gameWindow.close();
+				}
+				else if (event.type == sf::Event::MouseButtonReleased)
+				{
+					auto mousePosition = sf::Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
+					if (this->_die.getRollDiceButton().getGlobalBounds().contains(mousePosition))
+					{
+						rolled = true;
+					}
+				}
+			}
+		} while (rolled == false); // wait until they roll
+
 		//roll
 		die_roll = roll();
+		// set the correct texture for the die face value
+		string temp = "Images/dice_", temp2 = std::to_string(die_roll), temp3 = ".png";
+		string fileName = temp + temp2 + temp3;
+		this->_die.load(fileName);
 
-		//draw
-			//draw dice roll
+		//draw dice roll (and the board I guess)
+		this->_gameWindow.clear();
+		for (int index = 0; index < drawVector.size(); ++index)
+		{
+			(*(drawVector[index])).draw(this->_gameWindow);
+		}
+		this->_gameWindow.display();
+		Sleep(1000); // wait one second before moving piece
 
-			//Update player position
-			//get cell for destination of roll
-			Cell new_cell = this->_gameBoard.getCell(_players[playerNumber].getPos() + die_roll);
+		//get cell for destination of roll
+		Cell new_cell = this->_gameBoard.getCell(_players[playerNumber - 1].getPos() + die_roll);
+		_players[playerNumber - 1].setPos(_players[playerNumber - 1].getPos() + die_roll); // Update player position
+		// Update sprite position
+		_players[playerNumber - 1].getSprite().setPosition(sf::Vector2f(new_cell.getXCord(), new_cell.getYCord()));
 
-			//set X/Y coords
-			_players[playerNumber].setPositionX(new_cell.getXCord());
-			_players[playerNumber].setPositionY(new_cell.getYCord());
+		//set X/Y coords
+		_players[playerNumber - 1].setPositionX(new_cell.getXCord());
+		_players[playerNumber - 1].setPositionY(new_cell.getYCord());
 
-			//draw new player position
-
+		//draw new player position
+		this->_gameWindow.clear();
+		for (int index = 0; index < drawVector.size(); ++index)
+		{
+			(*(drawVector[index])).draw(this->_gameWindow);
+		}
+		this->_gameWindow.display();
+		Sleep(1000); // wait one second before checking transport status
 
 		//check if transport
-		Cell temp = this->_gameBoard.getCell(_players[playerNumber].getPos());
-		if (temp.getDestIndex() != 0)
+		// Cell temp = this->_gameBoard.getCell(_players[playerNumber - 1].getPos()); // redundant, can just use new_cell
+		if (new_cell.getDestIndex() != 0)
 		{
 			//is a transport spot update player position
 			//temp int for new position
-			int dest = temp.getDestIndex();
+			int dest = new_cell.getDestIndex();
 
 			//cell for destination
 			Cell dest_cell = this->_gameBoard.getCell(dest);
 
 			//update position
-			_players[playerNumber].setPos(dest);
+			_players[playerNumber - 1].setPos(dest);
 
 			//update X/Y coordinates
-			_players[playerNumber].setPositionX(dest_cell.getXCord());
-			_players[playerNumber].setPositionY(dest_cell.getYCord());
+			_players[playerNumber - 1].setPositionX(dest_cell.getXCord());
+			_players[playerNumber - 1].setPositionY(dest_cell.getYCord());
+
+			// Update sprite position
+			_players[playerNumber - 1].getSprite().setPosition(sf::Vector2f(dest_cell.getXCord(), dest_cell.getYCord()));
 
 			//draw at new position
+			this->_gameWindow.clear();
+			for (int index = 0; index < drawVector.size(); ++index)
+			{
+				(*(drawVector[index])).draw(this->_gameWindow);
+			}
+			this->_gameWindow.display();
+			Sleep(1000); // wait one second before checking bonus roll status
 		}
 
 		//check if bonus roll
-		if (die_roll > (bonus - 1))
-		{
-			//player gets another roll
+		//if (die_roll >= bonus)
+		//{
+		//	//player gets another roll
 
-			//before running next turn check if end is reached
-			if (_players[playerNumber].getPos() > 99)
-			{
-				won = true;
-				return won;
-			}
-			else
-			{
-				//run bonus turn
-				playerTurn(playerNumber, bonus);
-			}
+		//	//before running next turn check if end is reached
+		//	if (_players[playerNumber].getPos() > 99)
+		//	{
+		//		won = true;
+		//		return won;
+		//	}
+		//	else
+		//	{
+		//		//run bonus turn
+		//		playerTurn(playerNumber, bonus, drawVector); // no need for recursion, because we have variable fin as condition for the while loop
+		//	}
+		//}
+		if (die_roll < bonus)
+		{
+			fin = true; // done with turn
 		}
 
-		//check if end is reached
-		if (_players[playerNumber].getPos() > 99)
+		// check if end is reached
+		if (_players[playerNumber - 1].getPos() > 99)
 		{
 			won = true;
+			fin = true;
 		}
 	}
 	return won;
@@ -227,14 +317,14 @@ bool GamePlay::playerTurn(int playerNumber, int bonus)
 //Returns: int for dice roll
 int GamePlay::roll()
 {
-	//generate and return a number 1 - 6
+	// generate and return a number 1 - 6
 	return ((rand() % 6) + 1);
 }
 
 
 
 ///////////////////////////////////////////////////////// Non-Member Functions //////////////////////////////////////////////
-// 
+
 // deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member
 // function so it didn't take up too much space in playGame
 void setUpMenus(Menu& titleScreen, Menu& howToPlay, Menu& Player1Wins, Menu& Player2Wins)
