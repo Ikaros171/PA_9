@@ -11,15 +11,11 @@ public:
 		: sf::RectangleShape(size)
 	{
 		this->setPosition(pos);
-		this->setFillColor(sf::Color::Transparent); // change to transparent later
+		this->setFillColor(sf::Color::Transparent);
 	}
 
 	// deconstructor
 	~Button();
-
-	// returns true if the button was clicked, false otherwise. To be called within the gameplay loop to determine which menu
-	// and/or gameboard to draw
-	bool wasClicked(sf::Event& event) const;
 
 private:
 

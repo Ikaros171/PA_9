@@ -23,13 +23,14 @@ public:
 	// destructor
 	~GameObject();
 
-	virtual void load(string& fileName);
+	virtual void load(const string& fileName);
 	virtual void draw(sf::RenderWindow& window);
 
 	// getters
 	virtual float getPositionX() const;
 	virtual float getPositionY() const;
 	virtual string& getFileName();
+	virtual sf::Sprite& getSprite();
 
 	// setters
 	virtual void setPositionX(float newX);

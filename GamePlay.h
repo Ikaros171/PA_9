@@ -3,9 +3,11 @@
 #include "Board.h"
 #include "GamePiece.h"
 #include "Menu.h"
+#include "Dice.h"
 
-//All commented out until other functions are built
-//UNCOMMENT LATER WHEN THEY ARE IMPLEMENTED
+#include <vector>
+#include <Windows.h> // for the Sleep function; called within player turn so that user can see the changes in gamePiece position
+					// step by step instead of the program drawing it too fast
 
 class GamePlay 
 {
@@ -17,7 +19,7 @@ public:
 	void playGame();
 
 	//functions
-	bool playerTurn(int playerNumber, int bonus = 6);
+	bool playerTurn(int playerNumber, int bonus, std::vector<GameObject*>& drawVector, sf::Event event);
 	int roll();
 
 private:
@@ -25,6 +27,7 @@ private:
 	GamePiece _players[2];
 	sf::RenderWindow _gameWindow;
 	GameObject _bottomBanner;
+	Dice _die;
 };
 
 // deals with loading the textures for the various menus and setting the position of the buttons - relegated it to a non-member

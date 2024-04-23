@@ -34,7 +34,7 @@ GameObject::~GameObject()
 	// handled by the Call Stack
 }
 
-void GameObject::load(string& fileName)
+void GameObject::load(const string& fileName)
 {
 	this->_texture.loadFromFile(fileName); // load texture
 	this->_sprite.setTexture(this->_texture); // set texture
@@ -60,6 +60,11 @@ float GameObject::getPositionY() const
 string& GameObject::getFileName()
 {
 	return this->_fileName;
+}
+
+sf::Sprite& GameObject::getSprite()
+{
+	return this->_sprite;
 }
 
 // setters
